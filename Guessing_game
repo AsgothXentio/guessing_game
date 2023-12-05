@@ -23,7 +23,6 @@ def start_game():
     else:
         print("Oh sorry, this is not correct data, let us start again")
         start_game()
-    print(guess_the_number)
 
     amount_lives = 5
 
