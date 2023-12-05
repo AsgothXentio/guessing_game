@@ -8,8 +8,10 @@ def start_game():
     easy_hard = input("To start, can you let us know if you want an easy game or a hard game(easy/hard):  ").lower()
     if easy_hard == "easy":
         guess_the_number = random.randint(0, 10)
+        max_number = 10
     elif easy_hard == "hard":
         guess_the_number = random.randint(0, 100)
+        max_number = 100
     else:
         print("That is not a correct input, please try again")
         start_game()
@@ -21,6 +23,7 @@ def start_game():
     else:
         print("Oh sorry, this is not correct data, let us start again")
         start_game()
+    print(guess_the_number)
 
     amount_lives = 5
 
@@ -29,8 +32,12 @@ def start_game():
     player_tries = 1
 
     while game_is_on:
+      try:
         player_input = int(input(" Input your guess here:  "))
+        while player_input > max_number:
+          player_input = int(input("Ow, that number was too high for the difficulty chosen, input a new guess here: "))
         if amount_lives == 1:
+            no_high_score = 1
             game_is_on = False
             print(f"Oh you didn't guess the number, it was {guess_the_number}")
         elif lives_player == "y" and player_input > guess_the_number:
@@ -41,20 +48,25 @@ def start_game():
         elif lives_player == "y" and player_input < guess_the_number:
             amount_lives -= 1
             player_tries += 1
-            print("That was to low")
+            print("That was too low")
             print(f"You have {amount_lives} lives left")
         elif lives_player == "n" and player_input < guess_the_number:
             print("That was too low")
             player_tries += 1
         elif lives_player == "n" and player_input > guess_the_number:
-            print("That was to low")
+            print("That was too high")
             player_tries += 1
         elif player_input == guess_the_number:
             print(f"You guessed it! It was indeed {guess_the_number}")
             print(f"You did it in {player_tries} tries")
             game_is_on = False
+      except ValueError as err:
+        print("DOES NOT COMPUTE, COMPUTER NEEDS NUMBER INPUT, PLEASE INPUT NUMBER HUMAN.")
 
-    if easy_hard == "easy":
+        
+    if no_high_score == 1:
+      print("Oh you didnt guess it with the amount of lives; this will not be added to the high score. ALL YOUR BASE JUST BELONG TO US")
+    elif easy_hard == "easy":
         high_score_easy.append(player_tries)
         high_score_easy.sort()
         print(f"The highscore on this level is {high_score_easy[0]}")
